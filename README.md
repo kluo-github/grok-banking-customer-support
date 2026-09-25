@@ -30,7 +30,7 @@ The application supports three main customer interaction types:
 
 The CrewAI Classifier Agent analyzes an incoming customer message and classifies it as:
 
-
+```text
 POSITIVE_FEEDBACK
 NEGATIVE_FEEDBACK
 QUERY
@@ -44,6 +44,7 @@ For positive feedback, the agent generates a personalized thank-you message.
 
 Example:
 
+```text
 Customer:
 Thanks for resolving my credit card issue.
 
@@ -63,7 +64,7 @@ For negative feedback, the system:
 
 Example:
 
-
+```text
 Customer:
 My debit card replacement still hasn't arrived.
 
@@ -81,7 +82,7 @@ The Query Handler extracts a six-digit ticket number from the customer message a
 
 Example:
 
-
+```text
 Customer:
 Can you check the status of ticket 483921?
 
@@ -128,9 +129,11 @@ The evaluation dashboard displays:
 - Expected classification
 - Actual classification
 
+---
 
 # System Architecture
 
+```text
                          Customer Message
                                 |
                                 v
@@ -170,6 +173,7 @@ Python handles deterministic operations such as:
 
 This design prevents the language model from directly controlling transactional database operations.
 
+---
 
 # Technology Stack
 
@@ -194,6 +198,7 @@ This design prevents the language model from directly controlling transactional 
 
 This project was developed using:
 
+```text
 Operating System: Fedora Linux 43
 IDE: Visual Studio Code
 Python: 3.12
@@ -207,7 +212,7 @@ Python 3.12 is used inside a virtual environment for compatibility and stability
 
 # Project Structure
 
-
+```text
 banking-support-ai/
 │
 ├── app.py
@@ -257,12 +262,13 @@ Move into the project directory:
 cd banking-support-ai
 ```
 
+---
 
 ## 2. Install Python
 
 This project was tested using:
 
-
+```text
 Python 3.12
 ```
 
@@ -272,6 +278,7 @@ Verify your Python installation:
 python3.12 --version
 ```
 
+---
 
 ## 3. Create a Virtual Environment
 
@@ -289,7 +296,7 @@ source .venv/bin/activate
 
 Your terminal should now show something similar to:
 
-
+```text
 (.venv) user@computer:~/banking-support-ai$
 ```
 
@@ -307,6 +314,8 @@ python --version
 python -m pip install --upgrade pip setuptools wheel
 ```
 
+---
+
 ## 5. Install Project Dependencies
 
 Install using:
@@ -323,7 +332,7 @@ python -m pip install "crewai[litellm]"
 
 The main dependencies include:
 
-
+```text
 crewai
 litellm
 groq
@@ -332,6 +341,7 @@ python-dotenv
 pandas
 ```
 
+---
 
 # Groq API Configuration
 
@@ -341,13 +351,13 @@ Create a Groq API key and add it to a local `.env` file.
 
 Create:
 
-
+```text
 .env
 ```
 
 Add:
 
-
+```env
 GROQ_API_KEY=your_groq_api_key_here
 LLM_MODEL=groq/openai/gpt-oss-20b
 ```
@@ -356,12 +366,35 @@ Do not place quotation marks around the API key.
 
 Example:
 
-
+```env
 GROQ_API_KEY=gsk_xxxxxxxxxxxxxxxxxxxxx
 LLM_MODEL=groq/openai/gpt-oss-20b
 ```
 
+---
 
+# Important Security Note
+
+Never upload the `.env` file or your API key to GitHub.
+
+Make sure `.gitignore` contains:
+
+```text
+.env
+.venv/
+__pycache__/
+*.pyc
+banking_support.log
+```
+
+The SQLite database may also be ignored if you do not want customer test data uploaded:
+
+```text
+data/
+*.db
+```
+
+---
 
 # SQLite Installation on Fedora
 
@@ -387,7 +420,7 @@ sqlitebrowser
 
 The application automatically creates the database at:
 
-
+```text
 data/banking_support.db
 ```
 
@@ -403,7 +436,7 @@ Stores support tickets generated for negative customer feedback.
 
 Important fields include:
 
-
+```text
 ticket_number
 customer_name
 message
@@ -414,7 +447,7 @@ updated_at
 
 Possible statuses include:
 
-
+```text
 Unresolved
 In Progress
 Resolved
@@ -426,7 +459,7 @@ Stores agent activity and customer interactions.
 
 Fields include:
 
-
+```text
 customer_name
 user_message
 classification
@@ -438,7 +471,7 @@ success
 created_at
 ```
 
-
+---
 
 # Running the Application
 
@@ -456,6 +489,7 @@ python -m streamlit run app.py
 
 The terminal should display something similar to:
 
+```text
 You can now view your Streamlit app in your browser.
 
 Local URL: http://localhost:8501
@@ -469,7 +503,7 @@ Open the Local URL in a browser.
 
 In the terminal where Streamlit is running, press:
 
-
+```text
 Ctrl + C
 ```
 
@@ -487,7 +521,7 @@ Allows a customer message to be submitted to the multi-agent workflow.
 
 The application displays:
 
-
+```text
 Classification
 Agent Route
 AI Response
@@ -495,7 +529,7 @@ Database Interaction
 Ticket Number
 ```
 
-
+---
 
 ## Tickets
 
@@ -503,34 +537,39 @@ Displays the SQLite support-ticket database.
 
 Users can also change ticket status between:
 
-
+```text
 Unresolved
 In Progress
 Resolved
 ```
 
+---
+
 ## Logs
 
 Displays previous AI interactions and provides operational statistics including:
 
-
+```text
 Total Interactions
 Successful Interactions
 Failed Interactions
 Success Rate
 ```
 
+---
+
 ## Evaluation
 
 Runs predefined classification test cases and displays:
 
-
+```text
 Test Cases
 Passed
 Failed
 Classification Accuracy
 ```
 
+---
 
 # Sample Test Scenarios
 
@@ -538,12 +577,13 @@ Classification Accuracy
 
 Customer:
 
+```text
 Thanks for resolving my credit card issue.
 ```
 
 Expected route:
 
-
+```text
 Classifier Agent
       |
       v
@@ -553,18 +593,19 @@ POSITIVE_FEEDBACK
 Feedback Handler Agent
 ```
 
-
+---
 
 ## Negative Feedback
 
 Customer:
 
-
+```text
 My debit card replacement still hasn't arrived.
 ```
 
 Expected route:
 
+```text
 Classifier Agent
       |
       v
@@ -579,18 +620,19 @@ Create Support Ticket
 
 A unique six-digit ticket should be generated.
 
+---
 
 ## Ticket Query
 
 After creating a ticket, enter:
 
-
+```text
 Could you check the status of ticket 483921?
 ```
 
 Expected route:
 
-
+```text
 Classifier Agent
       |
       v
@@ -605,11 +647,11 @@ SQLite Ticket Lookup
 
 Example response:
 
-
+```text
 Your ticket #483921 is currently marked as: Unresolved.
 ```
 
-
+---
 
 # CrewAI and Groq Compatibility
 
@@ -641,7 +683,7 @@ The current system can:
 - Calculate classification accuracy
 - Display all functionality through Streamlit
 
-
+---
 
 # Future Improvements
 
